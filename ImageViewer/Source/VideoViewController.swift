@@ -12,7 +12,7 @@ import AVFoundation
 
 extension VideoView: ItemView {}
 
-class VideoViewController: ItemBaseController<VideoView> {
+open class VideoViewController: ItemBaseController<VideoView> {
 
     fileprivate let swipeToDismissFadeOutAccelerationFactor: CGFloat = 6
 
@@ -48,7 +48,7 @@ class VideoViewController: ItemBaseController<VideoView> {
         super.init(index: index, itemCount: itemCount, fetchImageBlock: fetchImageBlock, configuration: configuration, isInitialController: isInitialController)
     }
 
-    override func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
 
         if isInitialController == true { embeddedPlayButton.alpha = 0 }
@@ -63,7 +63,7 @@ class VideoViewController: ItemBaseController<VideoView> {
         self.itemView.contentMode = .scaleAspectFill
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    override open func viewWillAppear(_ animated: Bool) {
 
         self.player.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
         self.player.addObserver(self, forKeyPath: "rate", options: NSKeyValueObservingOptions.new, context: nil)
@@ -73,7 +73,7 @@ class VideoViewController: ItemBaseController<VideoView> {
         super.viewWillAppear(animated)
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
+    override open func viewWillDisappear(_ animated: Bool) {
 
         self.player.removeObserver(self, forKeyPath: "status")
         self.player.removeObserver(self, forKeyPath: "rate")
@@ -83,19 +83,19 @@ class VideoViewController: ItemBaseController<VideoView> {
         super.viewWillDisappear(animated)
     }
 
-    override func viewDidAppear(_ animated: Bool) {
+    override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         performAutoPlay()
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
+    override open func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
         self.player.pause()
     }
 
-    override func viewDidLayoutSubviews() {
+    override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
         let isLandscape = itemView.bounds.width >= itemView.bounds.height
@@ -103,7 +103,7 @@ class VideoViewController: ItemBaseController<VideoView> {
         itemView.center = scrollView.boundsCenter
     }
 
-    @objc func playVideoInitially() {
+    @objc open func playVideoInitially() {
 
         self.player.play()
 
@@ -118,7 +118,7 @@ class VideoViewController: ItemBaseController<VideoView> {
         })
     }
 
-    override func closeDecorationViews(_ duration: TimeInterval) {
+    override public func closeDecorationViews(_ duration: TimeInterval) {
 
         UIView.animate(withDuration: duration, animations: { [weak self] in
 
@@ -127,7 +127,7 @@ class VideoViewController: ItemBaseController<VideoView> {
         })
     }
 
-    override func presentItem(alongsideAnimation: () -> Void, completion: @escaping () -> Void) {
+    override public func presentItem(alongsideAnimation: () -> Void, completion: @escaping () -> Void) {
 
         let circleButtonAnimation = {
 
@@ -149,7 +149,7 @@ class VideoViewController: ItemBaseController<VideoView> {
         return aspectFitSize(forContentOfSize: isLandscape ? fullHDScreenSizeLandscape : fullHDScreenSizePortrait, inBounds: rotationAdjustedBounds().size)
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
 
         if keyPath == "rate" || keyPath == "status" {
 
@@ -182,7 +182,7 @@ class VideoViewController: ItemBaseController<VideoView> {
         }
     }
 
-    override func remoteControlReceived(with event: UIEvent?) {
+    override open func remoteControlReceived(with event: UIEvent?) {
 
         if let event = event {
 
